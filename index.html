@@ -424,7 +424,6 @@
                 <button id="back-btn" class="btn bg-paper-texture w-1/2 py-3 text-xl sm:text-2xl">Zurück</button>
                 <button id="next-btn" class="btn bg-paper-texture w-1/2 py-3 text-xl sm:text-2xl" disabled>Weiter</button>
             </div>
-             <button id="neustart-btn" class="hidden btn bg-paper-texture px-16 py-4 text-2xl sm:text-3xl">Neustart</button>
         </div>
     </div>
     <script src="/dist/cleave.min.js"></script>
@@ -523,7 +522,6 @@
             const nextBtn = document.getElementById('next-btn');
             const stepNav = document.getElementById('step-nav');
             const step1Decorations = document.getElementById('step-1-decorations');
-            const neustartBtn = document.getElementById('neustart-btn');
             const themeToggle = document.getElementById('theme-toggle');
 
             // 4. REST-Call für Step 2 Daten
@@ -743,20 +741,12 @@
                 step1Decorations.style.display = step===1 ? 'block' : 'none';
                 startBtn.style.display = step===1 ? 'block' : 'none';
                 stepNav.style.display   = step>1&&step<6 ? 'flex' : 'none';
-                neustartBtn.style.display = step===6 ? 'block' : 'none';
                 nextBtn.textContent = step===5 ? 'Absenden' : 'Weiter';
                 checkNextButtonStatus();
                 if (step===2) setTimeout(() => { renderStep2Cards(); setupCarousel('step-2'); }, 50);
                 if (step===3) setTimeout(() => setupCarousel('step-3'), 50);
                 if (step===4) setupTopicSelector();
                 if (step===5) setupForm();
-            };
-
-            const resetApp = () => {
-                appState.selections = { 'step-2': {index:null}, 'step-3':{index:null}, 'step-4':[] };
-                appState.formData   = { vorname:'', handy:'' };
-                document.getElementById('contact-form').reset();
-                showStep(1);
             };
 
             // Event-Bindings
@@ -770,7 +760,6 @@
                 if (currentStep<totalSteps) showStep(currentStep+1);
             });
             backBtn.addEventListener('click', () => { if (currentStep>1) showStep(currentStep-1); });
-            neustartBtn.addEventListener('click', resetApp);
 
             // 6. Initialisierung
             await loadWahrsagerData();
