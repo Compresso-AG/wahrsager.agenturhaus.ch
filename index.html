@@ -689,6 +689,46 @@
                 nextBtn.disabled = !en;
             };
 
+            const handlePhoneError = (errorMessage) => {
+                // Alertbox mit der hinterlegten Fehlermeldung anzeigen
+                if (confirm(errorMessage)) {
+                    // Bei Klick auf OK zur Compresso-Seite weiterleiten
+                    window.location.href = 'https://compresso.ch/kompetenz/web-experience/';
+                } else {
+                    // Bei Klick auf Abbrechen ebenfalls weiterleiten
+                    window.location.href = 'https://compresso.ch/kompetenz/web-experience/';
+                }
+            };
+
+            async function submitPredictionRequest(url) {
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    // Überprüfen ob es sich um einen Error handelt
+                    if (data.status === 'error') {
+                        if (data.specific === 'phoneError') {
+                            // Spezifische Behandlung für phoneError
+                            handlePhoneError(data.message);
+                            return;
+                        }
+                        // Andere Fehler könnten hier behandelt werden
+                        console.error('API Error:', data.message);
+                        return;
+                    }
+
+                    // Erfolgreiche Antwort verarbeiten
+                    // Hier würden Sie normalerweise zur nächsten Seite wechseln
+                    // oder die Antwort entsprechend verarbeiten
+                    console.log('Success:', data);
+
+                } catch (error) {
+                    console.error('Network Error:', error);
+                    // Hier könnten Sie einen allgemeinen Fehlerbehandlungsalgorithmus implementieren
+                }
+            }
+
+
             const generateProphezeiungURL = () => {
                 const base = 'https://api.wahrsager.agenturhaus.ch/wp-json/wahrsager/v1/gettext';
                 const p = new URLSearchParams();
@@ -712,7 +752,8 @@
                 p.append('tel', raw);
                 p.append('level', appState.selections['step-3'].level);
                 const url = `${base}?${p}`;
-                fetch(url);
+                console.log('URL:', url);
+                submitPredictionRequest(url);
                 return url;
             };
 
