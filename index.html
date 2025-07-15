@@ -712,7 +712,6 @@
                 p.append('tel', raw);
                 p.append('level', appState.selections['step-3'].level);
                 const url = `${base}?${p}`;
-                console.log('Prophezeiung URL:', url);
                 fetch(url);
                 return url;
             };
